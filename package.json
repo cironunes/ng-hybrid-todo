@@ -1,0 +1,54 @@
+{
+  "name": "ng-hybrid-todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack -w",
+    "serve": "http-serve",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crossengage/ng-hybrid-todo.git"
+  },
+  "author": "Ciro Nunes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crossengage/ng-hybrid-todo/issues"
+  },
+  "homepage": "https://github.com/crossengage/ng-hybrid-todo#readme",
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-ui-router": "^1.0.0-rc.1",
+    "ng-redux": "^3.4.0-beta.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0",
+    "redux-devtools": "^3.3.2",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.2.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/angular": "^1.6.2",
+    "angular-mocks": "^1.6.1",
+    "awesome-typescript-loader": "^3.0.0-beta.18",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.1.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-webpack": "^1.7.0",
+    "ts-loader": "^1.3.3",
+    "typescript": "^2.1.4",
+    "typings": "^2.1.0",
+    "webpack": "^2.1.0-beta.25"
+  }
+}
