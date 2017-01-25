@@ -88,8 +88,8 @@ export const todosComponent = {
         ng-class="{ done: todoItem.done }"
       >
         <h-todo-item
-          item="todoItem"
-          on-update="$ctrl.onUpdateTodo($event)"
+          [item]="todoItem"
+          (update)="$ctrl.onUpdateTodo($event)"
         ></h-todo-item>
       </li>
     </ul>

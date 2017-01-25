@@ -1,3 +1,4 @@
+// AngularJS
 import * as angular from 'angular';
 import 'angular-ui-router';
 import ngRedux from 'ng-redux';
@@ -8,11 +9,13 @@ import { todoEdit } from './todo-edit';
 
 import { appComponent } from './app.component';
 
+// Redux
 import { combineReducers } from 'redux';
 import { default as thunk } from 'redux-thunk';
 
 import { todos, todo, todosFilter } from './components/todos/todos.state';
 
+// React / Redux DevTools
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -20,6 +23,11 @@ import { createDevTools } from 'redux-devtools';
 import { default as LogMonitor } from 'redux-devtools-log-monitor';
 import { default as DockMonitor } from 'redux-devtools-dock-monitor';
 
+// Angular
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { UpgradeModule } from '@angular/upgrade/static';
+
+import { AppModule } from './app.module';
 
 const rootReducer = combineReducers({
   todos,
@@ -89,4 +97,7 @@ angular.module('h', [
   .run(appRun)
   .component('hApp', appComponent);
 
-angular.bootstrap(document.body, ['h'], { strictDi: true });
+platformBrowserDynamic().bootstrapModule(AppModule).then(platformRef => {
+  const upgrade = platformRef.injector.get(UpgradeModule) as UpgradeModule;
+  upgrade.bootstrap(document.body, ['h'], {strictDi: true});
+});

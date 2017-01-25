@@ -1,39 +1,30 @@
 import * as angular from 'angular';
 
-class TodoItem {
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-  public todo;
-  public onUpdate: Function;
-  private item;
-
-  $onInit() {
-    this.todo = angular.copy(this.item);
-  }
-
-  updateTodo(item) {
-    const todo = {
-      id: item.id,
-      description: item.description,
-      done: item.done
-    };
-
-    this.onUpdate({ $event: { todo } });
-  }
-
-}
-
-export const todoItemComponent = {
-  bindings: {
-    item: '<',
-    onUpdate: '&'
-  },
-  controller: TodoItem,
+@Component({
+  selector: 'h-todo-item',
   template: `
     <input
       type="checkbox"
-      ng-model="$ctrl.todo.done"
-      ng-change="$ctrl.updateTodo($ctrl.todo)"
+      [(ngModel)]="todo.done"
+      (change)="updateTodo(todo)"
     >
-    <a ui-sref="todo({ id: $ctrl.todo.id })">{{ $ctrl.todo.description }}</a>
+    <a [attr.href]="'/todo/' + todo.id">{{ todo.description }}</a>
   `
-};
+})
+export class TodoItemComponent implements OnInit {
+
+  todo;
+  @Input() item: any;
+  @Output() update = new EventEmitter<any>();
+
+  ngOnInit() {
+    this.todo = angular.copy(this.item);
+  }
+
+  updateTodo(todo) {
+    this.update.emit({todo});
+  }
+
+}

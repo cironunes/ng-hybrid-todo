@@ -1,8 +1,16 @@
 import * as angular from 'angular';
+import { downgradeComponent } from '@angular/upgrade/static';
 
-import { todoItemComponent } from './todo-item.component';
+import { TodoItemComponent } from './todo-item.component';
 
 export const todoItem = angular
   .module('h.todoItem', [])
-  .component('hTodoItem', todoItemComponent)
+  .directive(
+    'hTodoItem',
+    downgradeComponent({
+      component: TodoItemComponent,
+      inputs: ['item'],
+      outputs: ['update']
+    }) as angular.IDirectiveFactory
+  )
   .name;
