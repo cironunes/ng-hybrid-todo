@@ -1,28 +1,39 @@
 import * as angular from 'angular';
+import {
+  Component,
+  Inject,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
 
-class TodoComponent  {
+@Component({
+  selector: 'h-todo',
+  template: `
+    <input type="text" [(ngModel)]="todo.description">
+    <button (click)="onDeleteTodo(todo)">delete</button>
+    <button (click)="onUpdateTodo(todo)">update</button>
+  `
+})
+export class TodoComponent implements OnInit, OnDestroy {
 
-  todo: any;
   todos;
-  private unsubscribe: Function;
-  private getTodos: Function;
-  private getTodo: Function;
-  private deleteTodo: Function;
-  private updateTodo: Function;
 
-  static $inject = [
-    '$ngRedux',
-    '$state',
-    '$stateParams',
-    'TodosActions'
-  ];
+  getTodos;
+  getTodo;
+  deleteTodo;
+  updateTodo;
+  unsubscribe;
 
   constructor(
-    private $ngRedux,
-    private $state,
-    private $stateParams,
-    private TodosActions
+    @Inject('$ngRedux') private $ngRedux,
+    @Inject('$state') private $state,
+    @Inject('$stateParams') private $stateParams,
+    @Inject('TodosActions') private TodosActions
   ) {
+    this.$state = $state;
+    this.$stateParams = $stateParams;
+    this.TodosActions = TodosActions;
+
     this.unsubscribe = this.$ngRedux.connect(
       this.mapStateToThis, this.TodosActions
     )(this);
@@ -37,12 +48,12 @@ class TodoComponent  {
     }
   }
 
-  $onInit() {
+  ngOnInit() {
     const todo = this.todos.find(item => item.id == this.$stateParams.id);
     this.getTodo(todo);
   }
 
-  $onDestroy() {
+  ngOnDestroy() {
     this.unsubscribe();
   }
 
@@ -58,11 +69,3 @@ class TodoComponent  {
 
 }
 
-export const todoComponent = {
-  controller: TodoComponent,
-  template: `
-    <input type="text" ng-model="$ctrl.todo.description">
-    <button ng-click="$ctrl.onDeleteTodo($ctrl.todo)">delete</button>
-    <button ng-click="$ctrl.onUpdateTodo($ctrl.todo)">update</button>
-  `
-};

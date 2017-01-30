@@ -1,6 +1,12 @@
 import * as angular from 'angular';
 
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit
+} from '@angular/core';
 
 @Component({
   selector: 'h-todo-item',
