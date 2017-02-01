@@ -1,9 +1,10 @@
 import * as angular from 'angular';
+import { downgradeComponent } from '@angular/upgrade/static';
 
 import { todo } from './todo';
 import { todoItem } from './todo-item';
 
-import { todosComponent } from './todos.component';
+import { TodosComponent } from './todos.component';
 import { TodosActions } from './todos.state';
 
 export const todos = angular
@@ -11,6 +12,11 @@ export const todos = angular
     todo,
     todoItem
   ])
-  .component('hTodos', todosComponent)
+  .directive(
+    'hTodos',
+    downgradeComponent({
+      component: TodosComponent
+    }) as angular.IDirectiveFactory
+  )
   .factory('TodosActions', TodosActions)
   .name;

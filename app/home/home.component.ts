@@ -1,6 +1,7 @@
-class HomeComponent {}
+import { Component } from '@angular/core';
 
-export const homeComponent = {
-  template: '<h-todos></h-todos>',
-  controller: HomeComponent
-};
+@Component({
+  selector: 'h-home',
+  template: '<h-todos></h-todos>'
+})
+export class HomeComponent {}

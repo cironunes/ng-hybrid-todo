@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { UIRouterModule } from 'ui-router-ng2';
 
+import { HomeComponent } from './home/home.component';
+import { TodosComponent } from './components/todos/todos.component';
 import { TodoComponent } from './components/todos/todo/todo.component';
 import { TodoItemComponent } from './components/todos/todo-item/todo-item.component';
 
@@ -37,11 +39,15 @@ import { TodoItemComponent } from './components/todos/todo-item/todo-item.compon
   ],
   declarations: [
     TodoItemComponent,
-    TodoComponent
+    TodoComponent,
+    TodosComponent,
+    HomeComponent
   ],
   entryComponents: [
     TodoItemComponent,
-    TodoComponent
+    TodoComponent,
+    TodosComponent,
+    HomeComponent
   ]
 })
 export class AppModule {

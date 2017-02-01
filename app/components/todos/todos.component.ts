@@ -1,25 +1,68 @@
+import {
+  Component,
+  Inject,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
+
 import { todos, todosFilter } from './todos.state';
 
-class TodosComponent {
+@Component({
+  selector: 'h-todos',
+  template: `
+    <form (submit)="onAddTodo()">
+      <input
+        type="text"
+        name="newTodoDescription"
+        placeholder="ex.: Conquer the world"
+        [(ngModel)]="newTodoDescription"
+      >
+      <button>Add</button>
+    </form>
+
+    <ul>
+      <li>
+        <a href="#" (click)="filter(true)">completed</a>
+      </li>
+      <li>
+        <a href="#" (click)="filter(false)">unfinished</a>
+      </li>
+      <li>
+        <a href="#" (click)="filter(null)">all</a>
+      </li>
+    </ul>
+
+    <ul>
+      <li
+        *ngFor="let todoItem of todoList"
+        [ngClass]="{ done: todoItem.done }"
+      >
+        <h-todo-item
+          [item]="todoItem"
+          (update)="onUpdateTodo($event)"
+        ></h-todo-item>
+      </li>
+    </ul>
+  `
+})
+export class TodosComponent implements OnInit, OnDestroy {
 
   public todoList: any[];
   public newTodoDescription: string;
   public todoFilter: any;
 
   private unsubscribe: Function;
-  private getTodos;
-  private addTodo;
-  private filterTodos;
+  private getTodos: Function;
+  private addTodo: Function;
+  private filterTodos: Function;
   private updateTodo: Function;
 
-  static $inject = ['$ngRedux', 'TodosActions'];
-
   constructor(
-    private $ngRedux,
-    private TodosActions
+    @Inject('$ngRedux') private $ngRedux,
+    @Inject('TodosActions') private TodosActions
   ) { }
 
-  $onInit() {
+  ngOnInit() {
     this.unsubscribe = this.$ngRedux.connect(
       this.mapStateToThis, this.TodosActions
     )(this);
@@ -27,7 +70,7 @@ class TodosComponent {
     this.getTodos();
   }
 
-  $onDestroy() {
+  ngOnDestroy() {
     this.unsubscribe();
   }
 
@@ -50,6 +93,11 @@ class TodosComponent {
 
   filter(filter: boolean): void {
     this.filterTodos(filter);
+
+    if (typeof this.todoFilter.done != 'boolean') return;
+
+    this.todoList = this.todoList
+      .filter(item => item.done === this.todoFilter.done);
   }
 
   onUpdateTodo($event) {
@@ -57,41 +105,3 @@ class TodosComponent {
   }
 
 }
-
-export const todosComponent = {
-  controller: TodosComponent,
-  template: `
-    <form ng-submit="$ctrl.onAddTodo()">
-      <input
-        type="text"
-        placeholder="ex.: Conquer the world"
-        ng-model="$ctrl.newTodoDescription"
-      >
-      <button>Add</button>
-    </form>
-
-    <ul>
-      <li>
-        <a href="#" ng-click="$ctrl.filter(true)">completed</a>
-      </li>
-      <li>
-        <a href="#" ng-click="$ctrl.filter(false)">unfinished</a>
-      </li>
-      <li>
-        <a href="#" ng-click="$ctrl.filter(null)">all</a>
-      </li>
-    </ul>
-
-    <ul>
-      <li
-        ng-repeat="todoItem in $ctrl.todoList | filter:$ctrl.todoFilter track by todoItem.id"
-        ng-class="{ done: todoItem.done }"
-      >
-        <h-todo-item
-          [item]="todoItem"
-          (update)="$ctrl.onUpdateTodo($event)"
-        ></h-todo-item>
-      </li>
-    </ul>
-  `
-};
