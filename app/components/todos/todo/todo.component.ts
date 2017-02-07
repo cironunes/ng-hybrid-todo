@@ -1,10 +1,13 @@
-import * as angular from 'angular';
 import {
   Component,
-  Inject,
-  OnInit,
-  OnDestroy
+  Input,
+  Inject
 } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+
+import { TodosActions } from '../todos.actions';
+
 
 @Component({
   selector: 'h-todo',
@@ -14,58 +17,26 @@ import {
     <button (click)="onUpdateTodo(todo)">update</button>
   `
 })
-export class TodoComponent implements OnInit, OnDestroy {
+export class TodoComponent {
 
-  todos;
-
-  getTodos;
-  getTodo;
-  deleteTodo;
-  updateTodo;
-  unsubscribe;
-
+  @Input() todo;
+  
   constructor(
-    @Inject('$ngRedux') private $ngRedux,
     @Inject('$state') private $state,
-    @Inject('$stateParams') private $stateParams,
-    @Inject('TodosActions') private TodosActions
+    private todosActions: TodosActions,
+    private store: Store<any>
   ) {
     this.$state = $state;
-    this.$stateParams = $stateParams;
-    this.TodosActions = TodosActions;
-
-    this.unsubscribe = this.$ngRedux.connect(
-      this.mapStateToThis, this.TodosActions
-    )(this);
-
-    this.getTodos();
-  }
-
-  mapStateToThis(state) {
-    return {
-      todos: state.todos,
-      todo: angular.copy(state.todo)
-    }
-  }
-
-  ngOnInit() {
-    const todo = this.todos.find(item => item.id == this.$stateParams.id);
-    this.getTodo(todo);
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe();
   }
 
   onDeleteTodo(todo) {
-    this.deleteTodo(todo)
+    this.todosActions.deleteTodo(todo);
     this.$state.go('home');
   }
 
   onUpdateTodo(todo) {
-    this.updateTodo(todo)
+    this.todosActions.updateTodo(todo);
     this.$state.go('home');
   }
 
 }
-

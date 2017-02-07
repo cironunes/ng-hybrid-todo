@@ -8,7 +8,8 @@ export const todo = angular
   .directive(
     'hTodo',
     downgradeComponent({
-      component: TodoComponent
+      component: TodoComponent,
+      inputs: ['todo']
     }) as angular.IDirectiveFactory
   )
   .name;

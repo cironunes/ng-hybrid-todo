@@ -27,6 +27,9 @@
     "@angular/platform-browser": "^2.4.4",
     "@angular/platform-browser-dynamic": "^2.4.4",
     "@angular/upgrade": "^2.4.4",
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/effects": "^2.0.0",
+    "@ngrx/store": "^2.2.1",
     "angular": "^1.6.1",
     "angular-ui-router": "^1.0.0-rc.1",
     "core-js": "^2.4.1",
@@ -44,6 +47,8 @@
     "zone.js": "^0.7.6"
   },
   "devDependencies": {
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/store": "^2.2.1",
     "@types/angular": "^1.6.2",
     "angular-mocks": "^1.6.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",

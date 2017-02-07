@@ -1,39 +1,55 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { UIRouterModule } from 'ui-router-ng2';
+
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { HomeComponent } from './home/home.component';
-import { TodosComponent } from './components/todos/todos.component';
-import { TodoComponent } from './components/todos/todo/todo.component';
-import { TodoItemComponent } from './components/todos/todo-item/todo-item.component';
+import { TodoEditComponent } from './todo-edit/todo-edit.component';
 
-import { TodosActions2 } from './components/todos/todos.state';
+import { TodosComponent } from './components/todos/todos.component';
+import { TodoItemComponent } from './components/todos/todo-item/todo-item.component';
+import { TodoComponent } from './components/todos/todo/todo.component';
+
+import {
+  todos,
+  todo,
+  todosFilter,
+} from './components/todos/todos.state';
+
+import { TodosActions } from './components/todos/todos.actions';
+import { TodosEffects } from './components/todos/todos.effects';
 
 @NgModule({
   imports: [
     BrowserModule,
     UpgradeModule,
-    FormsModule
+    FormsModule,
+    HttpModule,
+    StoreModule.provideStore({
+      todos,
+      todo,
+      todosFilter
+    }),
+    EffectsModule.run(TodosEffects)
   ],
   declarations: [
     TodoItemComponent,
     TodoComponent,
     TodosComponent,
-    HomeComponent
+    HomeComponent,
+    TodoEditComponent
   ],
   entryComponents: [
     TodoItemComponent,
     TodoComponent,
-    HomeComponent
+    HomeComponent,
+    TodoEditComponent
   ],
   providers: [
-    {
-      provide: '$ngRedux',
-      useFactory: ($injector: any) => $injector.get('$ngRedux'),
-      deps: ['$injector']
-    },
     {
       provide: '$state',
       useFactory: ($injector: any) => $injector.get('$state'),
@@ -44,23 +60,8 @@ import { TodosActions2 } from './components/todos/todos.state';
       useFactory: ($injector: any) => $injector.get('$stateParams'),
       deps: ['$injector']
     },
-    {
-      provide: 'TodosActions',
-      useFactory: ($injector: any) => $injector.get('TodosActions'),
-      deps: ['$injector']
-    },
-    {
-      provide: '$q',
-      useFactory: ($injector: any) => $injector.get('$q'),
-      deps: ['$injector']
-    },
-    {
-      provide: '$http',
-      useFactory: ($injector: any) => $injector.get('$http'),
-      deps: ['$injector']
-    },
-    TodosActions2
-  ],
+    TodosActions
+ ],
 })
 export class AppModule {
   ngDoBootstrap() {}

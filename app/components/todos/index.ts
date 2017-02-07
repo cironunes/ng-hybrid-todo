@@ -5,7 +5,7 @@ import { todo } from './todo';
 import { todoItem } from './todo-item';
 
 import { TodosComponent } from './todos.component';
-import { TodosActions, TodosActions2 } from './todos.state';
+import { TodosActions } from './todos.actions';
 
 export const todos = angular
   .module('h.components.todos', [
@@ -18,6 +18,5 @@ export const todos = angular
       component: TodosComponent
     }) as angular.IDirectiveFactory
   )
-  .factory('TodosActions', TodosActions)
-  .factory('TodosActions2', downgradeInjectable(TodosActions2))
+  .factory('TodosActions', downgradeInjectable(TodosActions))
   .name;

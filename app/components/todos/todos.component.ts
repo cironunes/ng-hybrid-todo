@@ -1,9 +1,13 @@
 import {
   Component,
   Inject,
-  OnInit,
-  OnDestroy
+  OnInit
 } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
+import { TodosActions } from './todos.actions';
 
 
 @Component({
@@ -33,7 +37,7 @@ import {
 
     <ul>
       <li
-        *ngFor="let todoItem of todoList"
+        *ngFor="let todoItem of todoList | async"
         [ngClass]="{ done: todoItem.done }"
       >
         <h-todo-item
@@ -44,40 +48,22 @@ import {
     </ul>
   `
 })
-export class TodosComponent implements OnInit, OnDestroy {
+export class TodosComponent implements OnInit {
 
-  public todoList: any[];
+  public todoList: Observable<any>;
   public newTodoDescription: string;
-  public todoFilter: any;
-
-  private unsubscribe: Function;
-  private getTodos: Function;
-  private addTodo: Function;
-  private filterTodos: Function;
-  private updateTodo: Function;
 
   constructor(
-    @Inject('$ngRedux') private $ngRedux,
-    @Inject('TodosActions') private TodosActions
-  ) { }
+    private store: Store<any>,
+    private todosActions: TodosActions
+  ) {
+    this.todoList = this.store.select('todos');
+  }
 
   ngOnInit() {
-    this.unsubscribe = this.$ngRedux.connect(
-      this.mapStateToThis, this.TodosActions
-    )(this);
-
-    this.getTodos();
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe();
-  }
-
-  mapStateToThis(state) {
-    return {
-      todoList: state.todos,
-      todoFilter: state.todosFilter
-    };
+    this.todoList.subscribe(state => {
+      this.todosActions.getTodos(state);
+    });
   }
 
   onAddTodo() {
@@ -86,21 +72,16 @@ export class TodosComponent implements OnInit, OnDestroy {
       done: false
     };
 
-    this.addTodo(payload)
+    this.todosActions.addTodo(payload);
     this.newTodoDescription = '';
   }
 
   filter(filter: boolean): void {
-    this.filterTodos(filter);
-
-    if (typeof this.todoFilter.done != 'boolean') return;
-
-    this.todoList = this.todoList
-      .filter(item => item.done === this.todoFilter.done);
+    this.todosActions.filterTodos(filter);
   }
 
   onUpdateTodo($event) {
-    this.updateTodo($event.todo);
+    this.todosActions.updateTodo($event.todo);
   }
 
 }
