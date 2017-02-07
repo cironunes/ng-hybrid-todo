@@ -1,3 +1,5 @@
+import { Injectable, Inject } from '@angular/core';
+
 interface IAction {
   type: string;
   payload?: any;
@@ -67,6 +69,53 @@ export const TodosActions: any = ($q, $http) => {
   };
 };
 TodosActions.$inject = ['$q', '$http'];
+
+
+@Injectable()
+export class TodosActions2 {
+
+  constructor(
+    @Inject('$q') private $q,
+    @Inject('$http') private $http,
+  ) {}
+
+    getTodos() {
+      return (dispatch, getState) => {
+        const { todos } = getState();
+
+        if (todos.length) {
+          return this.$q.when(todos);
+        } else {
+          return this.$http.get('data/todos.json')
+            .then(_extract)
+            .then(data => dispatch({ type: GET_TODOS, payload: data }));
+        }
+      };
+    }
+
+    addTodo(todo) {
+      todo.id = _getNextId();
+      return { type: ADD_TODO, payload: todo };
+    }
+
+    filterTodos(filter) {
+      return { type: FILTER_TODOS, payload: filter };
+    }
+
+    getTodo(todo) {
+      return { type: GET_TODO, payload: todo };
+    }
+
+    deleteTodo(todo) {
+      return { type: DELETE_TODO, payload: todo };
+    }
+
+    updateTodo(todo) {
+      return { type: UPDATE_TODO, payload: todo };
+    }
+
+}
+
 
 export const todos = (state = [], { type, payload }: IAction) => {
   switch(type) {

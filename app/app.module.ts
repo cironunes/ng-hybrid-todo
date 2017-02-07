@@ -9,7 +9,25 @@ import { TodosComponent } from './components/todos/todos.component';
 import { TodoComponent } from './components/todos/todo/todo.component';
 import { TodoItemComponent } from './components/todos/todo-item/todo-item.component';
 
+import { TodosActions2 } from './components/todos/todos.state';
+
 @NgModule({
+  imports: [
+    BrowserModule,
+    UpgradeModule,
+    FormsModule
+  ],
+  declarations: [
+    TodoItemComponent,
+    TodoComponent,
+    TodosComponent,
+    HomeComponent
+  ],
+  entryComponents: [
+    TodoItemComponent,
+    TodoComponent,
+    HomeComponent
+  ],
   providers: [
     {
       provide: '$ngRedux',
@@ -30,25 +48,19 @@ import { TodoItemComponent } from './components/todos/todo-item/todo-item.compon
       provide: 'TodosActions',
       useFactory: ($injector: any) => $injector.get('TodosActions'),
       deps: ['$injector']
-    }
+    },
+    {
+      provide: '$q',
+      useFactory: ($injector: any) => $injector.get('$q'),
+      deps: ['$injector']
+    },
+    {
+      provide: '$http',
+      useFactory: ($injector: any) => $injector.get('$http'),
+      deps: ['$injector']
+    },
+    TodosActions2
   ],
-  imports: [
-    BrowserModule,
-    UpgradeModule,
-    FormsModule
-  ],
-  declarations: [
-    TodoItemComponent,
-    TodoComponent,
-    TodosComponent,
-    HomeComponent
-  ],
-  entryComponents: [
-    TodoItemComponent,
-    TodoComponent,
-    TodosComponent,
-    HomeComponent
-  ]
 })
 export class AppModule {
   ngDoBootstrap() {}

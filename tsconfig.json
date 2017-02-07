@@ -2,9 +2,11 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
+        "moduleResolution": "node",
         "noImplicitAny": false,
-        "sourceMap": false,
+        "sourceMap": true,
         "jsx": "react",
+        "emitDecoratorMetadata": true,
         "experimentalDecorators": true
     },
     "exclude": [
