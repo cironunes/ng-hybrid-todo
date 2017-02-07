@@ -1,11 +1,11 @@
 module.exports = {
-  entry: './app/index.tsx',
+  entry: './app/index.ts',
   output: {
     filename: 'app.js',
     path: './dist'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jpg', '.jpeg', '.gif', '.png', '.css']
+    extensions: ['.ts', '.js', '.jpg', '.jpeg', '.gif', '.png', '.css']
   },
   module: {
     rules: [

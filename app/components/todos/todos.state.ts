@@ -25,7 +25,7 @@ export const todos = (state = [], { type, payload }: Action) => {
   }
 };
 
-export const todosFilter = (state = [], { type, payload }: Action) => {
+export const todosFilter = (state = {}, { type, payload }: Action) => {
   switch(type) {
     case FILTER_TODOS:
       let filter = typeof payload === 'boolean' ? { done: payload } : {};

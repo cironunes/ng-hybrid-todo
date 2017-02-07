@@ -4,8 +4,6 @@ import {
   Inject
 } from '@angular/core';
 
-import { Store } from '@ngrx/store';
-
 import { TodosActions } from '../todos.actions';
 
 
@@ -23,18 +21,18 @@ export class TodoComponent {
   
   constructor(
     @Inject('$state') private $state,
-    private todosActions: TodosActions,
-    private store: Store<any>
+    private todosActions: TodosActions
   ) {
-    this.$state = $state;
   }
 
   onDeleteTodo(todo) {
+    this.todosActions.filterTodos({});
     this.todosActions.deleteTodo(todo);
     this.$state.go('home');
   }
 
   onUpdateTodo(todo) {
+    this.todosActions.filterTodos({});
     this.todosActions.updateTodo(todo);
     this.$state.go('home');
   }

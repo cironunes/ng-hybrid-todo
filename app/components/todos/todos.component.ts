@@ -7,8 +7,26 @@ import {
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/map';
+
 import { TodosActions } from './todos.actions';
 
+interface Todo {
+  id?: number;
+  description: string;
+  done: boolean;
+}
+
+interface TodosFilter {
+  done?: boolean;
+}
+
+interface AppState {
+  todos: Todo[],
+  todosFilter: TodosFilter,
+  todo: Todo
+}
 
 @Component({
   selector: 'h-todos',
@@ -37,7 +55,7 @@ import { TodosActions } from './todos.actions';
 
     <ul>
       <li
-        *ngFor="let todoItem of todoList | async"
+        *ngFor="let todoItem of filteredTodoList$ | async"
         [ngClass]="{ done: todoItem.done }"
       >
         <h-todo-item
@@ -50,20 +68,44 @@ import { TodosActions } from './todos.actions';
 })
 export class TodosComponent implements OnInit {
 
-  public todoList: Observable<any>;
+  private subscription;
+  public todosFilter$: Observable<TodosFilter>;
+  public todoList$: Observable<Todo[]>;
+  public filteredTodoList$: Observable<any>;
+
   public newTodoDescription: string;
 
   constructor(
-    private store: Store<any>,
+    private store: Store<AppState>,
     private todosActions: TodosActions
   ) {
-    this.todoList = this.store.select('todos');
+    this.todoList$ = this.store.select('todos');
+    this.todosFilter$ = this.store.select('todosFilter');
+
+    this.filteredTodoList$ = Observable.combineLatest(
+      this.todoList$,
+      this.todosFilter$,
+      (todoList, todosFilter) => {
+        return { todoList, todosFilter };
+      }
+    )
+    .map(state => {
+      if (typeof state.todosFilter.done !== 'boolean') return state.todoList;
+      
+      return state.todoList
+        .filter(todo => todo.done === state.todosFilter.done);
+    });
   }
 
   ngOnInit() {
-    this.todoList.subscribe(state => {
-      this.todosActions.getTodos(state);
-    });
+    this.subscription = this.filteredTodoList$
+      .subscribe(todos => this.todosActions.getTodos(todos));
+      
+    this.subscription.unsubscribe();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onAddTodo() {

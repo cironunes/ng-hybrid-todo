@@ -34,7 +34,8 @@ import { TodosEffects } from './components/todos/todos.effects';
       todo,
       todosFilter
     }),
-    EffectsModule.run(TodosEffects)
+    EffectsModule.run(TodosEffects),
+
   ],
   declarations: [
     TodoItemComponent,

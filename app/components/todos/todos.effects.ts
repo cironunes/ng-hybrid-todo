@@ -27,8 +27,4 @@ export class TodosEffects {
           .map(res => ({ type: GET_TODOS_SUCCESS, payload: res.json() }));
       }
     });
-
-  @Effect() filterTodos$ = this.actions$
-    .ofType('FILTER_TODOS')
-    .map(action => JSON.stringify(action.payload));
 }
