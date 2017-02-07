@@ -5,7 +5,6 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { todos, todosFilter } from './todos.state';
 
 @Component({
   selector: 'h-todos',
