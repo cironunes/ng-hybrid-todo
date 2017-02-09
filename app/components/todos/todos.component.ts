@@ -1,7 +1,6 @@
 import {
   Component,
-  Inject,
-  OnInit
+  Inject
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -66,7 +65,7 @@ interface AppState {
     </ul>
   `
 })
-export class TodosComponent implements OnInit {
+export class TodosComponent {
 
   private subscription;
   public todosFilter$: Observable<TodosFilter>;
@@ -85,27 +84,11 @@ export class TodosComponent implements OnInit {
     this.filteredTodoList$ = Observable.combineLatest(
       this.todoList$,
       this.todosFilter$,
-      (todoList, todosFilter) => {
+      (todoList = [], todosFilter = {}) => {
         return { todoList, todosFilter };
       }
     )
-    .map(state => {
-      if (typeof state.todosFilter.done !== 'boolean') return state.todoList;
-      
-      return state.todoList
-        .filter(todo => todo.done === state.todosFilter.done);
-    });
-  }
-
-  ngOnInit() {
-    this.subscription = this.filteredTodoList$
-      .subscribe(todos => this.todosActions.getTodos(todos));
-      
-    this.subscription.unsubscribe();
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    .map(this.filterTodoList);
   }
 
   onAddTodo() {
@@ -124,6 +107,15 @@ export class TodosComponent implements OnInit {
 
   onUpdateTodo($event) {
     this.todosActions.updateTodo($event.todo);
+  }
+
+  private filterTodoList(state) {
+    const { todosFilter, todoList } = state;
+
+    if (typeof todosFilter.done !== 'boolean') return todoList;
+    
+    return todoList
+      .filter(todo => todo.done === todosFilter.done);
   }
 
 }

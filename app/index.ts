@@ -6,8 +6,6 @@ import { components } from './components';
 import { home } from './home';
 import { todoEdit } from './todo-edit';
 
-import { appComponent } from './app.component';
-
 // Angular
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -43,8 +41,7 @@ angular.module('h', [
     home,
     todoEdit
   ])
-  .config(appConfig)
-  .component('hApp', appComponent);
+  .config(appConfig);
 
 
 platformBrowserDynamic().bootstrapModule(AppModule).then(platformRef => {

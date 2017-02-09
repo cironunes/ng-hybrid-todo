@@ -7,6 +7,8 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { AppComponent } from './app.component';
+
 import { HomeComponent } from './home/home.component';
 import { TodoEditComponent } from './todo-edit/todo-edit.component';
 
@@ -38,6 +40,7 @@ import { TodosEffects } from './components/todos/todos.effects';
 
   ],
   declarations: [
+    AppComponent,
     TodoItemComponent,
     TodoComponent,
     TodosComponent,
@@ -45,6 +48,7 @@ import { TodosEffects } from './components/todos/todos.effects';
     TodoEditComponent
   ],
   entryComponents: [
+    AppComponent,
     TodoItemComponent,
     TodoComponent,
     HomeComponent,
@@ -63,7 +67,7 @@ import { TodosEffects } from './components/todos/todos.effects';
     },
     TodosActions
  ],
+ bootstrap: [AppComponent]
 })
 export class AppModule {
-  ngDoBootstrap() {}
 }

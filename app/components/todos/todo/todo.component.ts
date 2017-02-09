@@ -26,13 +26,11 @@ export class TodoComponent {
   }
 
   onDeleteTodo(todo) {
-    this.todosActions.filterTodos({});
     this.todosActions.deleteTodo(todo);
     this.$state.go('home');
   }
 
   onUpdateTodo(todo) {
-    this.todosActions.filterTodos({});
     this.todosActions.updateTodo(todo);
     this.$state.go('home');
   }

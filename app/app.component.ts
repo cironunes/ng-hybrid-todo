@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { TodosActions } from './components/todos/todos.actions';
 
 @Component({
   selector: 'h-app',
   template: `
     <h1>What to do?</h1>
-
     <div ui-view></div>
   `,
 })
-class AppComponent { }
+export class AppComponent implements OnInit {
+  
+  constructor(
+    private todosActions: TodosActions
+  ) {}
 
-export const appComponent  = {
-  template: `
-    <h1>What to do?</h1>
+  ngOnInit() {
+    this.todosActions.getTodos([]);
+  }
 
-    <div ui-view></div>
-  `,
-  controller: AppComponent
-};
+}

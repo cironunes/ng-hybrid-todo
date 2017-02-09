@@ -12,6 +12,10 @@ import {
   UPDATE_TODO
 } from './todos.state';
 
+
+// ----------------------------------------
+// convenience methods
+// ----------------------------------------
 let lastId = 1;
 
 const _getNextId = () => {
@@ -22,6 +26,7 @@ const _getNextId = () => {
 const _extract = result => result.data;
 
 
+
 @Injectable()
 export class TodosActions {
 
@@ -30,7 +35,7 @@ export class TodosActions {
     private http: Http
   ) {}
 
-    getTodos(todos) {
+    getTodos(todos: any[]) {
       return this.store.dispatch({ type: GET_TODOS, payload: todos });
     }
 
