@@ -1,5 +1,3 @@
-import * as angular from 'angular';
-
 import {
   Component,
   Input,
@@ -7,6 +5,10 @@ import {
   EventEmitter,
   OnInit
 } from '@angular/core';
+
+import { TodosActions } from '../todos.actions';
+
+import { Todo } from '../todos.model';
 
 @Component({
   selector: 'h-todo-item',
@@ -16,21 +18,32 @@ import {
       [(ngModel)]="todo.done"
       (change)="updateTodo(todo)"
     >
-    <a [attr.href]="'/todo/' + todo.id">{{ todo.description }}</a>
+    <a
+      [routerLink]="['/todo', todo.id]"
+      (click)="selectItem(todo)"
+    >{{ todo.description }}</a>
   `
 })
 export class TodoItemComponent implements OnInit {
 
-  todo;
-  @Input() item: any;
+  todo: Todo;
+  @Input() item: Todo;
   @Output() update = new EventEmitter<any>();
 
+  constructor(
+    private todosActions: TodosActions
+  ) {}
+
   ngOnInit() {
-    this.todo = angular.copy(this.item);
+    this.todo = Object.assign({}, this.item);
   }
 
   updateTodo(todo) {
     this.update.emit({todo});
+  }
+
+  selectItem(todo) {
+    this.todosActions.getTodo(todo);
   }
 
 }

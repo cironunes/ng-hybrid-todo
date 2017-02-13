@@ -12,6 +12,8 @@ import {
   UPDATE_TODO
 } from './todos.state';
 
+import { AppState } from '../../app.model';
+import { Todo, TodosFilter } from './todos.model';
 
 // ----------------------------------------
 // convenience methods
@@ -31,32 +33,32 @@ const _extract = result => result.data;
 export class TodosActions {
 
   constructor(
-    private store: Store<any>,
+    private store: Store<AppState>,
     private http: Http
   ) {}
 
-    getTodos(todos: any[]) {
+    getTodos(todos: Todo[]) {
       return this.store.dispatch({ type: GET_TODOS, payload: todos });
     }
 
-    addTodo(todo) {
+    addTodo(todo: Todo) {
       todo.id = _getNextId();
       return this.store.dispatch({ type: ADD_TODO, payload: todo });
     }
 
-    filterTodos(filter) {
+    filterTodos(filter: TodosFilter) {
       return this.store.dispatch({ type: FILTER_TODOS, payload: filter });
     }
 
-    getTodo(todo) {
+    getTodo(todo: Todo) {
       return this.store.dispatch({ type: GET_TODO, payload: todo });
     }
 
-    deleteTodo(todo) {
+    deleteTodo(todo: Todo) {
       return this.store.dispatch({ type: DELETE_TODO, payload: todo });
     }
 
-    updateTodo(todo) {
+    updateTodo(todo: Todo) {
       return this.store.dispatch({ type: UPDATE_TODO, payload: todo });
     }
 

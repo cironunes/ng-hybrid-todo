@@ -11,21 +11,8 @@ import 'rxjs/add/operator/map';
 
 import { TodosActions } from './todos.actions';
 
-interface Todo {
-  id?: number;
-  description: string;
-  done: boolean;
-}
-
-interface TodosFilter {
-  done?: boolean;
-}
-
-interface AppState {
-  todos: Todo[],
-  todosFilter: TodosFilter,
-  todo: Todo
-}
+import { Todo, TodosFilter } from './todos.model';
+import { AppState } from '../../app.model';
 
 @Component({
   selector: 'h-todos',
@@ -42,13 +29,13 @@ interface AppState {
 
     <ul>
       <li>
-        <a href="#" (click)="filter(true)">completed</a>
+        <button (click)="filter(true)">completed</button>
       </li>
       <li>
-        <a href="#" (click)="filter(false)">unfinished</a>
+        <button (click)="filter(false)">unfinished</button>
       </li>
       <li>
-        <a href="#" (click)="filter(null)">all</a>
+        <button (click)="filter(null)">all</button>
       </li>
     </ul>
 
@@ -70,7 +57,7 @@ export class TodosComponent {
   private subscription;
   public todosFilter$: Observable<TodosFilter>;
   public todoList$: Observable<Todo[]>;
-  public filteredTodoList$: Observable<any>;
+  public filteredTodoList$: Observable<Todo[]>;
 
   public newTodoDescription: string;
 
@@ -81,14 +68,9 @@ export class TodosComponent {
     this.todoList$ = this.store.select('todos');
     this.todosFilter$ = this.store.select('todosFilter');
 
-    this.filteredTodoList$ = Observable.combineLatest(
-      this.todoList$,
-      this.todosFilter$,
-      (todoList = [], todosFilter = {}) => {
-        return { todoList, todosFilter };
-      }
-    )
-    .map(this.filterTodoList);
+    this.filteredTodoList$ = Observable
+      .combineLatest(this.todoList$, this.todosFilter$)
+      .map(this.filterTodoList);
   }
 
   onAddTodo() {
@@ -109,9 +91,7 @@ export class TodosComponent {
     this.todosActions.updateTodo($event.todo);
   }
 
-  private filterTodoList(state) {
-    const { todosFilter, todoList } = state;
-
+  private filterTodoList([ todoList, todosFilter ]) {
     if (typeof todosFilter.done !== 'boolean') return todoList;
     
     return todoList

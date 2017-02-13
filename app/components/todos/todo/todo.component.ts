@@ -4,35 +4,42 @@ import {
   Inject
 } from '@angular/core';
 
+import { Location } from '@angular/common';
+
 import { TodosActions } from '../todos.actions';
 
+import { Todo } from '../todos.model';
 
 @Component({
   selector: 'h-todo',
   template: `
-    <input type="text" [(ngModel)]="todo.description">
-    <button (click)="onDeleteTodo(todo)">delete</button>
-    <button (click)="onUpdateTodo(todo)">update</button>
+    <input type="text" [(ngModel)]="todoCopy.description">
+    <button (click)="onDeleteTodo(todoCopy)">delete</button>
+    <button (click)="onUpdateTodo(todoCopy)">update</button>
   `
 })
 export class TodoComponent {
 
-  @Input() todo;
+  @Input() todo: Todo;
+  todoCopy: Todo;
   
   constructor(
-    @Inject('$state') private $state,
+    private location: Location,
     private todosActions: TodosActions
-  ) {
+  ) {}
+
+  ngOnInit() {
+    this.todoCopy = Object.assign({}, this.todo);
   }
 
   onDeleteTodo(todo) {
     this.todosActions.deleteTodo(todo);
-    this.$state.go('home');
+    this.location.back();
   }
 
   onUpdateTodo(todo) {
     this.todosActions.updateTodo(todo);
-    this.$state.go('home');
+    this.location.back();
   }
 
 }

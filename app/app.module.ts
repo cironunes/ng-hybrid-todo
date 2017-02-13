@@ -2,72 +2,54 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { UpgradeModule } from '@angular/upgrade/static';
+import { RouterModule } from '@angular/router';
+
+import { APP_BASE_HREF } from '@angular/common';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 
-import { HomeComponent } from './home/home.component';
-import { TodoEditComponent } from './todo-edit/todo-edit.component';
+import { ComponentsModule } from './components/components.module';
+import { HomeModule } from './home/home.module';
+import { TodoEditModule } from './todo-edit/todo-edit.module';
 
-import { TodosComponent } from './components/todos/todos.component';
-import { TodoItemComponent } from './components/todos/todo-item/todo-item.component';
-import { TodoComponent } from './components/todos/todo/todo.component';
-
-import {
-  todos,
-  todo,
-  todosFilter,
-} from './components/todos/todos.state';
-
-import { TodosActions } from './components/todos/todos.actions';
 import { TodosEffects } from './components/todos/todos.effects';
+
+import { todos, todo, todosFilter } from './components/todos/todos.state';
+
+const rootReducer = { todos, todo, todosFilter };
 
 @NgModule({
   imports: [
     BrowserModule,
-    UpgradeModule,
-    FormsModule,
     HttpModule,
-    StoreModule.provideStore({
-      todos,
-      todo,
-      todosFilter
-    }),
-    EffectsModule.run(TodosEffects),
 
+    HomeModule,
+    TodoEditModule,
+    
+    AppRoutingModule,
+    RouterModule.forRoot([], {
+      initialNavigation: true
+    }),
+
+    EffectsModule.run(TodosEffects),
+    StoreModule.provideStore(rootReducer),
+    StoreDevtoolsModule.instrumentOnlyWithExtension({
+      maxAge: 5
+    }),
   ],
   declarations: [
     AppComponent,
-    TodoItemComponent,
-    TodoComponent,
-    TodosComponent,
-    HomeComponent,
-    TodoEditComponent
-  ],
-  entryComponents: [
-    AppComponent,
-    TodoItemComponent,
-    TodoComponent,
-    HomeComponent,
-    TodoEditComponent
   ],
   providers: [
-    {
-      provide: '$state',
-      useFactory: ($injector: any) => $injector.get('$state'),
-      deps: ['$injector']
-    },
-    {
-      provide: '$stateParams',
-      useFactory: ($injector: any) => $injector.get('$stateParams'),
-      deps: ['$injector']
-    },
-    TodosActions
+    { provide: APP_BASE_HREF, useValue: '/' },
  ],
- bootstrap: [AppComponent]
+ bootstrap: [ AppComponent ]
 })
 export class AppModule {
+
 }

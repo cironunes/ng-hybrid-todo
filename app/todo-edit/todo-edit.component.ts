@@ -11,12 +11,10 @@ export class TodoEditComponent {
   todo;
 
   constructor(
-    @Inject('$stateParams') private $stateParams,
     private store: Store<any>
   ) {
-    this.store.subscribe(state => {
-      this.todo = state.todos.find(item => item.id == this.$stateParams.id);
-    });
+    this.store
+      .subscribe(state => this.todo = state.todo);
   }
 
 }

@@ -6,7 +6,7 @@ import { TodosActions } from './components/todos/todos.actions';
   selector: 'h-app',
   template: `
     <h1>What to do?</h1>
-    <div ui-view></div>
+    <router-outlet></router-outlet>
   `,
 })
 export class AppComponent implements OnInit {
